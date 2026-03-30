@@ -8,8 +8,8 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=viatab-db
-      - POSTGRES_USER=viatab-user
+      - POSTGRES_DB=viatab_db
+      - POSTGRES_USER=viatab_user
       - POSTGRES_PASSWORD=admin
 
   backend:
@@ -23,8 +23,8 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/viatab-db
-      - SPRING_DATASOURCE_USERNAME=viatab-user
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/viatab_db
+      - SPRING_DATASOURCE_USERNAME=viatab_user
       - SPRING_DATASOURCE_PASSWORD=admin
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
