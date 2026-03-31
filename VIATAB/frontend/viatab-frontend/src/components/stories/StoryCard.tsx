@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
 import type { Story } from '../../types'
 import { formatTimestamp } from '../../utils/format'
+import { Badge } from '../ui/Badge'
 
 const departmentLabels: Record<string, string> = {
   SOFTWARE_ENGINEERING: 'Software Engineering',
@@ -10,18 +12,18 @@ const departmentLabels: Record<string, string> = {
 }
 
 const statusStyles: Record<string, string> = {
-  DRAFT: 'bg-amber-100 text-amber-700',
+  DRAFT: 'bg-slate-100 text-text-secondary border border-border',
   PUBLISHED: 'bg-accent/10 text-accent',
 }
 
-export function StoryCard({ story }: { story: Story }) {
+export function StoryCard({ story, actions }: { story: Story; actions?: ReactNode }) {
   const [imageError, setImageError] = useState(false)
   const department = departmentLabels[story.department] ?? story.department.replace('_', ' ')
 
   return (
     <motion.article
       layout
-      whileHover={{ y: -6 }}
+      whileHover={{ scale: 1.03 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
       className="group overflow-hidden rounded-[1.75rem] border border-border bg-white shadow-soft"
     >
@@ -41,11 +43,14 @@ export function StoryCard({ story }: { story: Story }) {
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-text-primary shadow-sm">
           {department}
         </div>
-        <div className="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white shadow-sm">
-          {story.category || 'General'}
-        </div>
       </div>
       <div className="space-y-4 p-5">
+        <div className="flex items-center gap-2">
+          <Badge variant="muted">{story.category || 'General'}</Badge>
+          <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[story.status]}`}>
+            {story.status.toLowerCase()}
+          </span>
+        </div>
         <div className="space-y-2">
           <h3 className="text-xl font-semibold text-text-primary">{story.title}</h3>
           <p className="text-sm leading-6 text-text-secondary max-h-16 overflow-hidden">{story.caption}</p>
@@ -54,9 +59,7 @@ export function StoryCard({ story }: { story: Story }) {
           <span>{story.authorName}</span>
           <span>{formatTimestamp(story.createdAt)}</span>
         </div>
-        <div className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[story.status]}`}>
-          {story.status.toLowerCase()}
-        </div>
+        {actions ? <div className="mt-4 border-t border-border pt-4">{actions}</div> : null}
       </div>
     </motion.article>
   )

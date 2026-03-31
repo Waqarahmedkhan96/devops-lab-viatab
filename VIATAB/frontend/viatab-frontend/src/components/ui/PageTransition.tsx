@@ -2,10 +2,10 @@ import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 
 const pageMotion = {
-  initial: { opacity: 0, y: 18 },
+  initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -18 },
-  transition: { duration: 0.35, ease: 'easeOut' },
+  exit: { opacity: 0, y: -24 },
+  transition: { duration: 0.4, ease: 'easeOut' },
 }
 
 export function PageTransition({ children }: { children: ReactNode }) {

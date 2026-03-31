@@ -87,15 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setError(null)
 
-      const response = await registerRequest(payload)
-      localStorage.setItem(TOKEN_KEY, response.accessToken)
-      axiosInstance.defaults.headers.common.Authorization = `Bearer ${response.accessToken}`
-      setToken(response.accessToken)
-
-      const profile = await fetchCurrentUser()
-      setUser(profile)
-
-      navigate('/stories', { replace: true })
+      await registerRequest(payload)
+      navigate('/login', { replace: true })
     } catch (error) {
       const message = getApiErrorMessage(error, 'Unable to register. Please try again.')
       setError(message)

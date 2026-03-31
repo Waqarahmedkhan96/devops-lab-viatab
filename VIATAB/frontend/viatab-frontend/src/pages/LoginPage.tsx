@@ -7,6 +7,9 @@ import { getApiErrorMessage } from '../utils/getApiErrorMessage'
 import { ROUTES } from '../utils/routes'
 import { PageTransition } from '../components/ui/PageTransition'
 import { SectionHeader } from '../components/ui/SectionHeader'
+import { SectionWrapper } from '../components/ui/SectionWrapper'
+import { InputField } from '../components/ui/InputField'
+import { Button } from '../components/ui/Button'
 
 export function LoginPage() {
   const { login } = useAuth()
@@ -25,8 +28,8 @@ export function LoginPage() {
 
     try {
       await login(form)
-    } catch (error) {
-      setError(getApiErrorMessage(error, 'Unable to login. Check your credentials.'))
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Unable to login. Check your credentials.'))
     } finally {
       setLoading(false)
     }
@@ -34,8 +37,8 @@ export function LoginPage() {
 
   return (
     <PageTransition>
-      <section className="mx-auto max-w-3xl space-y-8">
-        <div className="grid gap-8 rounded-[1.75rem] border border-border bg-white p-10 shadow-soft lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="mx-auto max-w-3xl space-y-8">
+        <SectionWrapper className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-6">
             <SectionHeader
               eyebrow="Member access"
@@ -50,45 +53,33 @@ export function LoginPage() {
 
           <div className="rounded-[1.75rem] border border-border bg-white p-8 shadow-sm">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label className="text-sm font-medium text-text-secondary" htmlFor="email">
-                  Email address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  className="mt-3 w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
-                />
-              </div>
+              <InputField
+                label="Email address"
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                placeholder="hello@university.edu"
+              />
 
-              <div>
-                <label className="text-sm font-medium text-text-secondary" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                  className="mt-3 w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
-                />
-              </div>
+              <InputField
+                label="Password"
+                id="password"
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                placeholder="Enter your password"
+              />
 
-              {error && <p className="rounded-3xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p>}
+              {error && <div className="rounded-3xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>}
 
-              <button
-                disabled={loading}
-                className="w-full rounded-3xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
-                type="submit"
-              >
+              <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? 'Signing in…' : 'Sign in'}
-              </button>
+              </Button>
             </form>
 
             <p className="mt-8 text-center text-sm text-text-secondary">
@@ -98,8 +89,8 @@ export function LoginPage() {
               </Link>
             </p>
           </div>
-        </div>
-      </section>
+        </SectionWrapper>
+      </div>
     </PageTransition>
   )
 }

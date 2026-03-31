@@ -7,6 +7,11 @@ import type { StoryForm } from '../types'
 import { getApiErrorMessage } from '../utils/getApiErrorMessage'
 import { PageTransition } from '../components/ui/PageTransition'
 import { SectionHeader } from '../components/ui/SectionHeader'
+import { SectionWrapper } from '../components/ui/SectionWrapper'
+import { InputField } from '../components/ui/InputField'
+import { SelectDropdown } from '../components/ui/SelectDropdown'
+import { Button } from '../components/ui/Button'
+import { Badge } from '../components/ui/Badge'
 
 const departments = [
   { label: 'Software Engineering', value: 'SOFTWARE_ENGINEERING' },
@@ -19,8 +24,7 @@ const statuses = [
   { label: 'Published', value: 'PUBLISHED' },
 ]
 
-const previewFallback =
-  'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80'
+const previewFallback = 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80'
 
 export function CreateStoryPage() {
   const navigate = useNavigate()
@@ -49,7 +53,6 @@ export function CreateStoryPage() {
   ) => {
     const { name, value } = event.target
     setForm((prev) => ({ ...prev, [name]: value }))
-
     if (name === 'imageUrl') {
       setImageError(false)
     }
@@ -63,8 +66,8 @@ export function CreateStoryPage() {
     try {
       await createStory(form)
       navigate('/my-stories')
-    } catch (error) {
-      setError(getApiErrorMessage(error, 'Unable to create story. Please check your input.'))
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Unable to create story. Please check your input.'))
     } finally {
       setLoading(false)
     }
@@ -73,170 +76,132 @@ export function CreateStoryPage() {
   return (
     <PageTransition>
       <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="rounded-[1.75rem] border border-border bg-white p-8 shadow-soft">
+        <SectionWrapper>
           <SectionHeader
             eyebrow="Create story"
             title="Publish a new academic narrative"
-            description="Fill out the story details and preview the result live before you publish."
+            description="Write a story, assign metadata, and preview your draft before you publish."
           />
 
           <form className="mt-10 space-y-8" onSubmit={handleSubmit}>
             <div className="grid gap-6 sm:grid-cols-2">
-              <label className="space-y-3 text-sm text-text-primary">
-                <span className="font-medium">Title</span>
-                <input
-                  name="title"
-                  value={form.title}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
-                />
-              </label>
-
-              <label className="space-y-3 text-sm text-text-primary">
-                <span className="font-medium">Category</span>
-                <input
-                  name="category"
-                  value={form.category}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
-                />
-              </label>
-            </div>
-
-            <label className="space-y-3 text-sm text-text-primary">
-              <span className="font-medium">Caption</span>
-              <input
-                name="caption"
-                value={form.caption}
+              <InputField
+                label="Title"
+                name="title"
+                value={form.title}
                 onChange={handleChange}
                 required
-                className="w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                placeholder="Enter your story title"
               />
-            </label>
-
-            <label className="space-y-3 text-sm text-text-primary">
-              <span className="font-medium">Image URL</span>
-              <input
-                name="imageUrl"
-                value={form.imageUrl}
+              <InputField
+                label="Category"
+                name="category"
+                value={form.category}
                 onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-                className="w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                required
+                placeholder="e.g. Research, Announcement"
               />
-            </label>
+            </div>
 
-            <label className="space-y-3 text-sm text-text-primary">
-              <span className="font-medium">Content</span>
+            <InputField
+              label="Caption"
+              name="caption"
+              value={form.caption}
+              onChange={handleChange}
+              required
+              placeholder="Write a brief summary of your story"
+            />
+
+            <InputField
+              label="Image URL"
+              name="imageUrl"
+              value={form.imageUrl}
+              onChange={handleChange}
+              placeholder="https://example.com/image.jpg"
+            />
+
+            <div>
+              <label className="block text-sm font-medium text-text-secondary">
+                Content
+              </label>
               <textarea
                 name="content"
                 value={form.content}
                 onChange={handleChange}
                 required
-                rows={8}
-                className="w-full rounded-[1.5rem] border border-border bg-background px-4 py-4 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                rows={10}
+                className="mt-3 w-full rounded-[1.5rem] border border-border bg-background px-4 py-4 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                placeholder="Write the full story content here"
               />
-            </label>
-
-            <div className="grid gap-6 sm:grid-cols-2">
-              <label className="space-y-3 text-sm text-text-primary">
-                <span className="font-medium">Department</span>
-                <select
-                  name="department"
-                  value={form.department}
-                  onChange={handleChange}
-                  className="w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
-                >
-                  {departments.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="space-y-3 text-sm text-text-primary">
-                <span className="font-medium">Status</span>
-                <select
-                  name="status"
-                  value={form.status}
-                  onChange={handleChange}
-                  className="w-full rounded-3xl border border-border bg-background px-4 py-3 text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
-                >
-                  {statuses.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
             </div>
 
-            {error && (
-              <div className="rounded-3xl bg-rose-50 px-4 py-3 text-sm text-rose-700">
-                {error}
-              </div>
-            )}
+            <div className="grid gap-6 sm:grid-cols-2">
+              <SelectDropdown
+                label="Department"
+                name="department"
+                value={form.department}
+                onChange={handleChange}
+                options={departments}
+              />
+              <SelectDropdown
+                label="Status"
+                name="status"
+                value={form.status}
+                onChange={handleChange}
+                options={statuses}
+              />
+            </div>
 
-            <button
-              disabled={loading}
-              type="submit"
-              className="w-full rounded-3xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
-            >
+            {error ? (
+              <div className="rounded-3xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</div>
+            ) : null}
+
+            <Button type="submit" disabled={loading} className="w-full">
               {loading ? 'Publishing story…' : 'Publish story'}
-            </button>
+            </Button>
           </form>
-        </section>
+        </SectionWrapper>
 
         <motion.section
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="rounded-[1.75rem] border border-border bg-white p-6 shadow-soft"
+          className="space-y-6"
         >
-          <div className="mb-6 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm uppercase tracking-[0.28em] text-secondary">Live preview</p>
-              <h2 className="text-2xl font-semibold text-text-primary">Story preview</h2>
-            </div>
-            <span className="rounded-full bg-accent/10 px-3 py-1 text-sm font-semibold text-accent">
-              {form.status.toLowerCase()}
-            </span>
-          </div>
-
-          <div className="overflow-hidden rounded-[1.5rem] border border-border bg-slate-100">
-            <img
-              src={previewImage}
-              alt="Story preview"
-              onError={() => setImageError(true)}
-              className="h-64 w-full object-cover"
-            />
-            <div className="p-6">
-              <div className="mb-4 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.3em] text-text-secondary">
-                <span className="rounded-full border border-border bg-background px-3 py-1">
-                  {form.department.replaceAll('_', ' ')}
-                </span>
-                <span className="rounded-full border border-border bg-background px-3 py-1">
-                  {form.category || 'General'}
-                </span>
+          <SectionWrapper className="space-y-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm uppercase tracking-[0.28em] text-secondary">Live preview</p>
+                <h2 className="text-2xl font-semibold text-text-primary">Story preview</h2>
               </div>
+              <Badge variant="accent">{form.status.toLowerCase()}</Badge>
+            </div>
 
-              <h3 className="text-2xl font-semibold text-text-primary">
-                {form.title || 'Your story title will appear here'}
-              </h3>
+            <div className="overflow-hidden rounded-[1.5rem] border border-border bg-slate-100">
+              <img
+                src={previewImage}
+                alt="Story preview"
+                onError={() => setImageError(true)}
+                className="h-64 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="mb-4 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.3em] text-text-secondary">
+                  <span className="rounded-full border border-border bg-background px-3 py-1">{form.department.replaceAll('_', ' ')}</span>
+                  <span className="rounded-full border border-border bg-background px-3 py-1">{form.category || 'General'}</span>
+                </div>
 
-              <p className="mt-3 text-text-secondary">
-                {form.caption || 'Add a short caption to introduce your narrative.'}
-              </p>
+                <h3 className="text-2xl font-semibold text-text-primary">{form.title || 'Your story title will appear here'}</h3>
 
-              <div className="mt-6 rounded-[1.5rem] bg-background p-4 text-sm text-text-secondary">
-                {form.content
-                  ? form.content.slice(0, 180) + (form.content.length > 180 ? '...' : '')
-                  : 'Your story content will be rendered in this section as you type.'}
+                <p className="mt-3 text-text-secondary">{form.caption || 'Add a short caption to introduce your narrative.'}</p>
+
+                <div className="mt-6 rounded-[1.5rem] bg-background p-4 text-sm text-text-secondary">
+                  {form.content
+                    ? form.content.slice(0, 180) + (form.content.length > 180 ? '...' : '')
+                    : 'Your story content will be rendered in this section as you type.'}
+                </div>
               </div>
             </div>
-          </div>
+          </SectionWrapper>
         </motion.section>
       </div>
     </PageTransition>

@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { Navbar } from './components/layout/Navbar'
+import { Footer } from './components/layout/Footer'
 import { ProtectedRoute } from './components/layout/ProtectedRoute'
 import { CreateStoryPage } from './pages/CreateStoryPage'
 import { HomePage } from './pages/HomePage'
@@ -33,6 +34,7 @@ function App() {
           </Routes>
         </AnimatePresence>
       </main>
+      <Footer />
     </div>
   )
 }
