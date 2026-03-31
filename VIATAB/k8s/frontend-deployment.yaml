@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: viatab-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: viatab-frontend
+  template:
+    metadata:
+      labels:
+        app: viatab-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: viatab-frontend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5173
+          env:
+            - name: VITE_API_BASE_URL
+              value: http://localhost:30007/api
+          readinessProbe:
+            tcpSocket:
+              port: 5173
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 5173
+            initialDelaySeconds: 20
+            periodSeconds: 15

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:8080/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
 const TOKEN_KEY = 'viatab_token'
 
 export const axiosInstance = axios.create({
@@ -27,7 +27,6 @@ axiosInstance.interceptors.response.use(
       localStorage.removeItem(TOKEN_KEY)
       window.location.href = '/login'
     }
-
     return Promise.reject(error)
   },
 )

@@ -22,8 +22,24 @@ spec:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://viatab-db:5432/viatab
             - name: SPRING_DATASOURCE_USERNAME
-              value: viatab_user
+              valueFrom:
+                secretKeyRef:
+                  name: viatab-db-secret
+                  key: POSTGRES_USER
             - name: SPRING_DATASOURCE_PASSWORD
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: viatab-db-secret
+                  key: POSTGRES_PASSWORD
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: update
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15

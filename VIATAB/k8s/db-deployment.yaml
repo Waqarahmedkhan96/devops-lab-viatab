@@ -19,8 +19,34 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: viatab
+              valueFrom:
+                secretKeyRef:
+                  name: viatab-db-secret
+                  key: POSTGRES_DB
             - name: POSTGRES_USER
-              value: viatab_user
+              valueFrom:
+                secretKeyRef:
+                  name: viatab-db-secret
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: viatab-db-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 20
+            periodSeconds: 15
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: viatab-db-pvc
