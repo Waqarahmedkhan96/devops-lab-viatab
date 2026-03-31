@@ -2,6 +2,7 @@ import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { type FormEvent, useState } from 'react'
 import { ROUTES } from '../../utils/routes'
 import { useAuth } from '../../hooks/useAuth'
+import logo from '../../assets/logo.png'
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `transition rounded-full px-3 py-2 text-sm font-medium ${
@@ -33,12 +34,15 @@ export function Navbar() {
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex min-w-[240px] items-center gap-4">
           <Link to={ROUTES.HOME} className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-3xl bg-primary/10 text-primary shadow-soft">
-              <span className="text-xl font-semibold">V</span>
-            </div>
+            <div className="h-12 w-12 overflow-hidden rounded-2xl bg-white p-1 shadow-soft transition hover:scale-105">
+  <img
+    src={logo}
+    alt="VIATAB Logo"
+    className="h-full w-full object-contain"
+  />
+</div>
             <div>
               <p className="text-lg font-semibold tracking-tight text-text-primary">VIATAB</p>
-              <p className="text-sm text-text-secondary">Campus Stories Across Departments</p>
             </div>
           </Link>
         </div>

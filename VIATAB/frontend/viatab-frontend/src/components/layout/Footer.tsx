@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../utils/routes'
+import logo from '../../assets/logo.png'
 
 const footerLinks = [
   { label: 'Home', to: ROUTES.HOME },
@@ -20,9 +21,13 @@ export function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 sm:px-6 lg:px-8 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-md space-y-4">
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-3xl bg-primary/10 text-primary shadow-soft">
-              <span className="text-xl font-semibold">V</span>
-            </div>
+            <div className="h-12 w-12 overflow-hidden rounded-2xl bg-white p-1 shadow-soft transition hover:scale-105">
+  <img
+    src={logo}
+    alt="VIATAB Logo"
+    className="h-full w-full object-contain"
+  />
+</div>
             <div>
               <p className="text-lg font-semibold text-text-primary">VIATAB</p>
               <p className="text-sm text-text-secondary">Campus Stories Across Departments</p>
