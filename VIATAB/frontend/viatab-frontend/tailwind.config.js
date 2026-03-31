@@ -3,18 +3,24 @@ export default {
   theme: {
     extend: {
       colors: {
-        viatab: {
-          50: '#eef2ff',
-          100: '#dbe4ff',
-          200: '#bac8ff',
-          300: '#91a7ff',
-          400: '#748ffc',
-          500: '#5c7cfa',
-          600: '#4f64e6',
-          700: '#4752c4',
-          800: '#3e439f',
-          900: '#3b3a80',
-        },
+        primary: '#1E3A5F',
+        secondary: '#4F46E5',
+        accent: '#14B8A6',
+        highlight: '#F97316',
+        background: '#F5F7FB',
+        surface: '#FFFFFF',
+        'text-primary': '#1F2937',
+        'text-secondary': '#6B7280',
+        border: '#E5E7EB',
+      },
+      boxShadow: {
+        soft: '0 24px 60px rgba(15, 23, 42, 0.08)',
+      },
+      borderRadius: {
+        extra: '1.75rem',
+      },
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

@@ -1,62 +1,75 @@
-import { Link } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { ROUTES } from '../../utils/routes'
 import { useAuth } from '../../hooks/useAuth'
+
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `transition rounded-full px-3 py-2 text-sm font-medium ${
+    isActive ? 'bg-primary/10 text-primary shadow-soft' : 'text-text-secondary hover:text-text-primary'
+  }`
 
 export function Navbar() {
   const { user, isAuthenticated, logout } = useAuth()
 
   return (
-    <header className="border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <div>
-          <Link to={ROUTES.HOME} className="text-xl font-semibold tracking-tight text-white">
-            VIATAB
-          </Link>
-          <p className="text-sm text-slate-400">VIA Tabloid Application</p>
+    <header className="sticky top-0 z-50 border-b border-border bg-white/95 backdrop-blur-xl shadow-sm">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="flex min-w-[220px] items-center gap-3">
+          <div className="grid h-12 w-12 place-items-center rounded-3xl bg-primary/10 text-primary shadow-soft">
+            <span className="text-xl font-semibold">V</span>
+          </div>
+          <div>
+            <Link to={ROUTES.HOME} className="text-lg font-semibold tracking-tight text-text-primary">
+              VIATAB
+            </Link>
+            <p className="text-sm text-text-secondary">Academic storytelling for professors</p>
+          </div>
         </div>
 
-        <nav className="flex flex-wrap items-center gap-3 text-sm text-slate-300">
-          <Link className="transition hover:text-white" to={ROUTES.HOME}>
+        <nav className="flex flex-wrap items-center gap-2">
+          <NavLink className={navLinkClass} to={ROUTES.HOME}>
             Home
-          </Link>
+          </NavLink>
           {isAuthenticated ? (
             <>
-              <Link className="transition hover:text-white" to={ROUTES.STORIES}>
+              <NavLink className={navLinkClass} to={ROUTES.STORIES}>
                 Stories
-              </Link>
-              <Link className="transition hover:text-white" to={ROUTES.CREATE_STORY}>
+              </NavLink>
+              <NavLink className={navLinkClass} to={ROUTES.CREATE_STORY}>
                 Create
-              </Link>
-              <Link className="transition hover:text-white" to={ROUTES.MY_STORIES}>
+              </NavLink>
+              <NavLink className={navLinkClass} to={ROUTES.MY_STORIES}>
                 My Stories
-              </Link>
+              </NavLink>
+            </>
+          ) : (
+            <NavLink className={navLinkClass} to={ROUTES.LOGIN}>
+              Login
+            </NavLink>
+          )}
+        </nav>
+
+        <div className="flex flex-wrap items-center gap-3">
+          {isAuthenticated ? (
+            <>
+              <span className="hidden rounded-full border border-border bg-slate-100 px-4 py-2 text-sm text-text-secondary sm:inline-flex">
+                Signed in as <strong className="ml-2 text-text-primary">{user?.fullName}</strong>
+              </span>
               <button
                 onClick={logout}
-                className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-slate-200 transition hover:border-slate-500 hover:text-white"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
               >
                 Logout
               </button>
             </>
           ) : (
-            <>
-              <Link className="transition hover:text-white" to={ROUTES.LOGIN}>
-                Login
-              </Link>
-              <Link
-                className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-slate-200 transition hover:border-slate-500 hover:text-white"
-                to={ROUTES.REGISTER}
-              >
-                Register
-              </Link>
-            </>
+            <Link
+              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
+              to={ROUTES.REGISTER}
+            >
+              Register
+            </Link>
           )}
-        </nav>
-
-        {isAuthenticated && (
-          <div className="hidden rounded-2xl bg-slate-900/80 px-4 py-2 text-sm text-slate-300 shadow-inner shadow-slate-950/30 sm:block">
-            Signed in as <span className="text-slate-100 font-medium">{user?.fullName}</span>
-          </div>
-        )}
+        </div>
       </div>
     </header>
   )

@@ -7,7 +7,7 @@ export function ProtectedRoute() {
 
   if (loading) {
     return (
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-8 text-center text-slate-300">
+      <div className="rounded-[1.75rem] border border-border bg-white p-8 text-center text-text-secondary shadow-soft">
         Loading...
       </div>
     )
