@@ -1,50 +1,33 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import { Navbar } from './components/layout/Navbar'
+import { ProtectedRoute } from './components/layout/ProtectedRoute'
+import { CreateStoryPage } from './pages/CreateStoryPage'
+import { HomePage } from './pages/HomePage'
+import { LoginPage } from './pages/LoginPage'
+import { MyStoriesPage } from './pages/MyStoriesPage'
+import { NotFoundPage } from './pages/NotFoundPage'
+import { RegisterPage } from './pages/RegisterPage'
+import { StoriesPage } from './pages/StoriesPage'
 
 function App() {
-  const [homeMessage, setHomeMessage] = useState('Loading home message...')
-  const [aboutMessage, setAboutMessage] = useState('Loading about message...')
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    fetch('http://localhost:8080/')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch home endpoint')
-        }
-        return response.text()
-      })
-      .then((data) => setHomeMessage(data))
-      .catch((err) => setError(err.message))
-
-    fetch('http://localhost:8080/about')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch about endpoint')
-        }
-        return response.text()
-      })
-      .then((data) => setAboutMessage(data))
-      .catch((err) => setError(err.message))
-  }, [])
-
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
-      <h1>VIATAB Frontend</h1>
-      <p>This frontend is connected to the Spring Boot backend.</p>
+    <div className="min-h-screen bg-slate-950 text-white">
+      <Navbar />
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-      <h2>Home Endpoint</h2>
-      <p>{homeMessage}</p>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/stories" element={<StoriesPage />} />
+            <Route path="/create" element={<CreateStoryPage />} />
+            <Route path="/my-stories" element={<MyStoriesPage />} />
+          </Route>
 
-      <h2>About Endpoint</h2>
-      <p>{aboutMessage}</p>
-
-      {error && (
-        <>
-          <h2>Error</h2>
-          <p>{error}</p>
-        </>
-      )}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
     </div>
   )
 }

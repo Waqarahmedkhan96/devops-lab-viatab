@@ -5,29 +5,41 @@ services:
     restart: always
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_DB: viatab_db
+      POSTGRES_USER: viatab_user
+      POSTGRES_PASSWORD: admin
     volumes:
       - db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=viatab_db
-      - POSTGRES_USER=viatab_user
-      - POSTGRES_PASSWORD=admin
 
   backend:
-    image: viatab-backend:latest
     build:
-      context: ./
+      context: ./backend/viatab-backend
+      dockerfile: Dockerfile
+    image: viatab-backend:latest
     container_name: viatab-backend-container
     restart: always
-    ports:
-      - "8080:8080"
     depends_on:
       - db
+    ports:
+      - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/viatab_db
-      - SPRING_DATASOURCE_USERNAME=viatab_user
-      - SPRING_DATASOURCE_PASSWORD=admin
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/viatab_db
+      SPRING_DATASOURCE_USERNAME: viatab_user
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  frontend:
+    build:
+      context: ./frontend/viatab-frontend
+      dockerfile: Dockerfile
+    image: viatab-frontend:latest
+    container_name: viatab-frontend-container
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
 
 volumes:
   db:
-    driver: local
